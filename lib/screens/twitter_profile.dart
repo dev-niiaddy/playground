@@ -311,10 +311,6 @@ class _TwitterProfileState extends State<TwitterProfile>
     );
   }
 
-  void onScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification) {}
-  }
-
   void onEditProfile() {}
 }
 
