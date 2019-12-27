@@ -1,0 +1,4 @@
+enum StackPosition {
+  TOP,
+  BOTTOM,
+}

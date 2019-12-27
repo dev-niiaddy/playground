@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:playground/util/constants.dart';
 
 class TwitterProfile extends StatefulWidget {
   @override
@@ -11,14 +11,6 @@ class _TwitterProfileState extends State<TwitterProfile>
     with TickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
-
-  AnimationController animationController;
-
-  Animation<double> profileAnimation;
-  Animation<double> positionTopAnimation;
-  Animation<double> positionLeftAnimation;
-
-  bool isScrollUp;
 
   List<String> tabs = [
     'Tweet',
@@ -36,45 +28,8 @@ class _TwitterProfileState extends State<TwitterProfile>
       length: tabs.length,
     );
 
-    animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-    );
-
-    profileAnimation = Tween<double>(
-      begin: 90,
-      end: 50,
-    ).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Interval(0.0, 1.0, curve: Curves.easeIn),
-      ),
-    );
-
-    positionTopAnimation = Tween<double>(
-      begin: 104.0,
-      end: 144.0,
-    ).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Interval(0.0, 1.0, curve: Curves.easeIn),
-      ),
-    );
-
-    positionLeftAnimation = Tween<double>(
-      begin: 10,
-      end: 30,
-    ).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Interval(0.0, 1.0, curve: Curves.easeIn),
-      ),
-    );
-
     _scrollController = ScrollController()
       ..addListener(() {
-        var direction = _scrollController.position.userScrollDirection;
-        isScrollUp = direction == ScrollDirection.forward;
         setState(() {});
       });
   }
@@ -117,7 +72,7 @@ class _TwitterProfileState extends State<TwitterProfile>
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: buildProfilePhoto(1),
+                              child: buildProfilePhoto(StackPosition.BOTTOM),
                             ),
                             GestureDetector(
                               onTap: onEditProfile,
@@ -236,46 +191,40 @@ class _TwitterProfileState extends State<TwitterProfile>
               // )
             ],
           ),
-          buildProfilePhoto(0)
+          buildProfilePhoto(StackPosition.TOP),
         ],
       ),
     );
   }
 
-  Widget buildProfilePhoto(int index) {
-    if (index == 0) {
-      double defaultTop = positionTopAnimation.value; //144.0; //104
-      double positionTop = defaultTop;
+  Widget buildProfilePhoto(StackPosition pos) {
+    if (pos == StackPosition.TOP) {
+      double animEndOffset = 65.0;
 
-      double animStartOffset = 1.0;
-      double animEndOffset = 86.0;
+      double multiplier = 0.0;
+      double proDim = 90;
+      double posLeft = 10;
+      double posTop = 104;
 
       if (_scrollController.hasClients) {
         double scrollOffset = _scrollController.offset;
-        positionTop -= scrollOffset;
 
-        // print('offset? $scrollOffset');
+        multiplier = (scrollOffset / animEndOffset).clamp(0.0, 1.0);
 
-        if (scrollOffset > animStartOffset &&
-            scrollOffset < animEndOffset &&
-            !isScrollUp) {
-          animationController.forward();
-        } else if (isScrollUp &&
-            scrollOffset > animStartOffset &&
-            scrollOffset < animEndOffset) {
-          animationController.reverse();
-        }
+        proDim -= (40 * multiplier);
+        posTop += (40 * multiplier) - scrollOffset;
+        posLeft += (20 * multiplier);
       }
 
       return Positioned(
-          top: positionTop,
+          top: posTop,
           // height: 90,
-          left: positionLeftAnimation.value,
+          left: posLeft,
           // width: 90,
-          child: (profileAnimation.value != 50)
+          child: (proDim != 50)
               ? Container(
-                  height: profileAnimation.value,
-                  width: profileAnimation.value,
+                  height: proDim,
+                  width: proDim,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(

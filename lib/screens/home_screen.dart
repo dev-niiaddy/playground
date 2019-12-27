@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:playground/screens/google_map_sheet.dart';
 import 'package:playground/widgets/screen_item.dart';
 import 'package:playground/screens/twitter_profile.dart';
 
@@ -64,6 +65,11 @@ class _HomeScreenState extends State<HomeScreen>
               FontAwesomeIcons.twitter,
               'Twitter Profile',
               screen: TwitterProfile(),
+            ),
+            ScreenItem(
+              FontAwesomeIcons.mapMarker,
+              'Google map',
+              screen: GoogleMapBottomSheet(),
             )
           ],
         ),
