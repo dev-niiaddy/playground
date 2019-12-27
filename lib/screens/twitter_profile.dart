@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:playground/util/constants.dart';
 
+const double ANIM_END_OFFSET = 65.0;
+
 class TwitterProfile extends StatefulWidget {
   @override
   _TwitterProfileState createState() => _TwitterProfileState();
@@ -184,11 +186,6 @@ class _TwitterProfileState extends State<TwitterProfile>
                   color: Colors.yellow,
                 ),
               ),
-              // SliverPersistentHeader(
-              //   pinned: true,
-              //   floating: true,
-              //   delegate: null,
-              // )
             ],
           ),
           buildProfilePhoto(StackPosition.TOP),
@@ -199,7 +196,7 @@ class _TwitterProfileState extends State<TwitterProfile>
 
   Widget buildProfilePhoto(StackPosition pos) {
     if (pos == StackPosition.TOP) {
-      double animEndOffset = 65.0;
+      double animEndOffset = ANIM_END_OFFSET;
 
       double multiplier = 0.0;
       double proDim = 90;
